@@ -1,30 +1,58 @@
 <template>
   <!--<img alt="Vue logo" src="./assets/logo.png">-->
-  <CourseDisplay
-    name="CS 164"
-    section="A"
-    professor="Professor Stuart"
-
-    link="https://learn.dcollege.net/ultra/courses/_353668_1/cl/outline"
-
-    banner="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-    notes="One of the courses ever! 👻"
-
-    discord="https://bigrat.monster"
-    syllabus="https://learn.dcollege.net/webapps/blackboard/execute/content/file?cmd=view&content_id=_13567338_1&course_id=_353668_1&launch_in_new=true"
-    custom_link="https://bigrat.monster"
-  />
+  <div>
+    <draggable tag="v-layout" v-model="draggableCards" class="course-container">
+      <template v-for="(course, i) in getCourseArray" :key="i">
+        <CourseDisplay
+          :name="course.name"
+          :section="course.section"
+          :professor="course.professor"
+          :link="course.link"
+          :banner="course.banner"
+          :notes="course.notes"
+          :discord="course.discord"
+          :syllabus="course.syllabus"
+          :custom_link="course.custom_link"
+        />
+      </template>
+    </draggable>
+  </div>
 </template>
 
 <script>
-import CourseDisplay from './components/CourseDisplay.vue'
+import { mapGetters, mapMutations } from "vuex";
+import { VueDraggableNext } from 'vue-draggable-next';
+import CourseDisplay from './components/CourseDisplay.vue';
+
+import { store } from "./store"
 
 export default {
   name: 'App',
   components: {
+    draggable: VueDraggableNext,
     CourseDisplay
+  },
+  computed: {
+    ...mapGetters({
+      getCourseArray: "getCourseArray"
+    }),
+    draggableCards: {
+      get() {
+        return store.state.courseArray;
+      },
+      set(val) {
+        store.commit("setCourseArray", val);
+      }
+    }
+  },
+  methods: {
+    ...mapMutations({
+      setcourseArray: "setCourseArray"
+    })
   }
 }
+
+
 </script>
 
 <style>
@@ -44,4 +72,9 @@ body {
 	color: var(--dark);
 	background-color: var(--light);
 }
+
+.course-container {
+  display: flex;
+}
+
 </style>
