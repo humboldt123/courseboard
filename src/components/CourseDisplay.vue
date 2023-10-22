@@ -3,19 +3,18 @@
     <div class="course">
       <div class="banner" :style="{ backgroundImage: 'url(' + banner + ')' }"/>
       <div class="content">
-        <h1 style="margin-bottom: 0;">{{ name }} [{{ section }}]</h1>
-        <p style="margin-top: 0; margin-left: 1px;">Professor: {{ professor }}</p>
-        <p>
+        <h1 class="name cutoff">{{ name }} [{{ section }}]</h1>
+        <p class="professor cutoff">Professor: {{ professor }}</p>
+        <p class="notes cutoff">
           {{ notes }}
         </p>
-        <div class="links-container">
+      </div>
+      <div class="links-container">
           <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
           <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
           <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
         </div>
-      </div>
       <div class="handle-container">
-        <span><!-- Created for spacing, do not touch --></span>
         <span class="material-symbols-outlined handle">drag_handle</span>
       </div>
     </div>
@@ -53,11 +52,30 @@ export default {
     margin: 5px;
   }
   .content {
-    padding: 0px 5px 5px 15px;
+    padding: 0px 5px 0px 15px;
+  }
+
+  .name {
+    margin-bottom: 0;
+    height: 1em;
+  }
+
+  .professor {
+    margin-top: 0; margin-left: 1px; height: 1em;
+  }
+
+  .notes {
+    height: 3em;
+  }
+
+  .cutoff {
+      overflow: hidden;
   }
 
   .links-container {
     text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .links-container > a {
     margin: 5px 10px 5px 10px;
@@ -73,7 +91,7 @@ export default {
 
   .handle-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
   }
   .handle {
     cursor: grab;
