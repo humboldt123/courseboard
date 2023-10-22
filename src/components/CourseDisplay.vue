@@ -5,7 +5,7 @@
       <div class="content">
         <h1 class="name cutoff">{{ name }} [{{ section }}]</h1>
         <p class="professor cutoff">Professor: {{ professor }}</p>
-        <p class="notes cutoff">
+        <p class="notes scroll">
           {{ notes }}
         </p>
       </div>
@@ -13,7 +13,7 @@
           <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
           <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
           <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
-        </div>
+      </div>
       <div class="handle-container">
         <span class="material-symbols-outlined handle">drag_handle</span>
       </div>
@@ -65,11 +65,15 @@ export default {
   }
 
   .notes {
-    height: 3em;
+    height: 3.5em;
   }
 
   .cutoff {
       overflow: hidden;
+  }
+
+  .scroll {
+    overflow: scroll;
   }
 
   .links-container {

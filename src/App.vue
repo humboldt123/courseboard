@@ -1,35 +1,43 @@
 <template>
-  <!--<img alt="Vue logo" src="./assets/logo.png">-->
-  <div>
-    <draggable
-        class="card-holder"
+  <div style="width: 100%; height: 100vh;" @dblclick="addCard()">
+    <div v-if="getCourseArray.length === 0">
+      <div class="info">
+        <div>
+          <p>Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <draggable
+          class="card-holder"
 
-        v-model="cards"
-        item-key="order"
-        animation="150"
+          v-model="cards"
+          item-key="order"
+          animation="150"
 
-        drag-class="pickable"
-        ghost-class="shadow"
+          drag-class="pickable"
+          ghost-class="shadow"
 
-        @start="drag = true;"
-        @end="drag = false;"
+          @start="drag = true;"
+          @end="drag = false;"
 
-        handle=".handle"
-      >
-      <template v-for="(course, i) in getCourseArray" :key="i">
-        <CourseDisplay
-          :name="course.name"
-          :section="course.section"
-          :professor="course.professor"
-          :link="course.link"
-          :banner="course.banner"
-          :notes="course.notes"
-          :discord="course.discord"
-          :syllabus="course.syllabus"
-          :custom_link="course.custom_link"
-        />
-      </template>
-    </draggable>
+          handle=".handle"
+        >
+        <template v-for="(course, i) in getCourseArray" :key="i">
+          <CourseDisplay
+            :name="course.name"
+            :section="course.section"
+            :professor="course.professor"
+            :link="course.link"
+            :banner="course.banner"
+            :notes="course.notes"
+            :discord="course.discord"
+            :syllabus="course.syllabus"
+            :custom_link="course.custom_link"
+          />
+        </template>
+      </draggable>
+    </div>
   </div>
 </template>
 
@@ -62,18 +70,45 @@ export default {
       },
       set(val) {
         store.commit("setCourseArray", val);
-      }
+      },
     }
   },
   methods: {  
     ...mapMutations({
       setcourseArray: "setCourseArray"
-    })
+    }),
+    addCard() {
+        this.draggableCards.push({
+                  name: "TEST 101",
+                  section: "123",
+                  professor: "Professor Bar",
+
+                  link: "https://bigrat.monster",
+
+                  banner: "https://i.imgur.com/5VRrVNk.png",
+                  notes: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+
+                  discord: "https://bigrat.monster",
+                  syllabus: "https://bigrat.monster",
+                  custom_link: "https://bigrat.monster"
+              })
+    }
   }
 }
 </script>
 
 <style>
+.info {
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: 100vh;
+}
+.info > div {
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
 .card-holder {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
