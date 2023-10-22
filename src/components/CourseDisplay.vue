@@ -3,9 +3,11 @@
     <div class="course">
       <div class="banner" :style="{ backgroundImage: 'url(' + banner + ')' }"/>
       <div class="content">
-        <h1>{{ name }} [{{ section }}]</h1>
-        <p>Professor: {{ professor }}</p>
-        <p>{{ notes }}</p>
+        <h1 style="margin-bottom: 0;">{{ name }} [{{ section }}]</h1>
+        <p style="margin-top: 0; margin-left: 1px;">Professor: {{ professor }}</p>
+        <p>
+          {{ notes }}
+        </p>
         <div class="links-container">
           <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
           <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
