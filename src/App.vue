@@ -2,7 +2,7 @@
   <!--<img alt="Vue logo" src="./assets/logo.png">-->
   <div>
     <draggable
-        tag="transition-group"
+        class="card-holder"
 
         v-model="cards"
         item-key="order"
@@ -74,9 +74,24 @@ export default {
 </script>
 
 <style>
-transition-group {
+.card-holder {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
+}
+@media screen and (max-width: 1200px) {
+  .card-holder {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media screen and (max-width: 800px) {
+  .card-holder {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 600px) {
+  .card-holder {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 </style>

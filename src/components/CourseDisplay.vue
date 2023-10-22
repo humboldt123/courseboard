@@ -6,9 +6,11 @@
         <h1>{{ name }} [{{ section }}]</h1>
         <p>Professor: {{ professor }}</p>
         <p>{{ notes }}</p>
-        <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
-        <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
-        <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
+        <div class="links-container">
+          <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
+          <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
+          <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
+        </div>
       </div>
       <div class="handle-container">
         <span><!-- Created for spacing, do not touch --></span>
@@ -50,6 +52,21 @@ export default {
   }
   .content {
     padding: 0px 5px 5px 15px;
+  }
+
+  .links-container {
+    text-align: center;
+  }
+  .links-container > a {
+    margin: 5px 10px 5px 10px;
+  }
+  
+  a > span {
+    color: var(--dark);
+  }
+
+  a:hover > span {
+    color: var(--superdark);
   }
 
   .handle-container {
