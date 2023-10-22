@@ -1,7 +1,21 @@
 <template>
   <!--<img alt="Vue logo" src="./assets/logo.png">-->
   <div>
-    <draggable tag="v-layout" v-model="draggableCards" class="course-container">
+    <draggable
+        tag="transition-group"
+
+        v-model="cards"
+        item-key="order"
+        animation="150"
+
+        drag-class="pickable"
+        ghost-class="shadow"
+
+        @start="drag = true;"
+        @end="drag = false;"
+
+        handle=".handle"
+      >
       <template v-for="(course, i) in getCourseArray" :key="i">
         <CourseDisplay
           :name="course.name"
@@ -26,11 +40,17 @@ import CourseDisplay from './components/CourseDisplay.vue';
 
 import { store } from "./store"
 
+// Store logic, and export App
 export default {
   name: 'App',
   components: {
     draggable: VueDraggableNext,
     CourseDisplay
+  },
+  data() {
+    return {
+      drag: false,
+    }
   },
   computed: {
     ...mapGetters({
@@ -45,36 +65,18 @@ export default {
       }
     }
   },
-  methods: {
+  methods: {  
     ...mapMutations({
       setcourseArray: "setCourseArray"
     })
   }
 }
-
-
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lisu+Bosa&display=swap');
-:root {
-	--dark: #212121;
-	--superdark: #0a0a0a;
-	--light: #fefefe;
-	--red: #e83b3b;
-	--darkred: #ae2334;
-
-	--transparent: #00000000;
+transition-group {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
-
-body {
-	font-family: 'Lisu Bosa', serif;
-	color: var(--dark);
-	background-color: var(--light);
-}
-
-.course-container {
-  display: flex;
-}
-
 </style>

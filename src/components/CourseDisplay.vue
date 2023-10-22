@@ -1,11 +1,20 @@
 <template>
-  <div class="course" draggable="true">
+  <div>
+    <div class="course">
       <div class="banner" :style="{ backgroundImage: 'url(' + banner + ')' }"/>
       <div class="content">
         <h1>{{ name }} [{{ section }}]</h1>
         <p>Professor: {{ professor }}</p>
         <p>{{ notes }}</p>
+        <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
+        <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
+        <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
       </div>
+      <div class="handle-container">
+        <span><!-- Created for spacing, do not touch --></span>
+        <span class="material-symbols-outlined handle">drag_handle</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +52,15 @@ export default {
     padding: 0px 5px 5px 15px;
   }
 
+  .handle-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .handle {
+    cursor: grab;
+    margin: 0 5px 5px 5px;
+  }
+
   .banner {
     background-size: cover;
     position: relative;
@@ -52,5 +70,21 @@ export default {
 
     width: 100%;
     height: 8em;
+  }
+
+  /* Get rid of the ghost of the div that appears when we pick them up */
+  .pickable { display: none; }
+
+  .shadow > div {
+    animation-name: shrink;
+    animation-duration: 0.05s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes shrink {
+    0% {transform: scale(1);}
+    40% {transform: scale(0.9);}
+    100% {transform: scale(0.8);}
   }
 </style>
