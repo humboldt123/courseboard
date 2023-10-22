@@ -80,7 +80,7 @@ export default {
     addCard() {
         this.draggableCards.push({
                   name: "TEST 101",
-                  section: "123",
+                  section: "A",
                   professor: "Professor Bar",
 
                   link: "https://bigrat.monster",

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="course">
-      <div class="banner" :style="{ backgroundImage: 'url(' + banner + ')' }"/>
+      <div class="banner" :style="{ backgroundImage: 'url(' + (banner.length > 0 ? banner : 'https://i.imgur.com/5VRrVNk.png') + ')' }"/>
       <div class="content">
-        <h1 class="name cutoff">{{ name }} [{{ section }}]</h1>
+        <h1 class="name cutoff">{{ name }} <span v-if="section.length > 0">[{{ section }}]</span></h1>
         <p class="professor cutoff">Professor: {{ professor }}</p>
         <p class="notes scroll">
           {{ notes }}
@@ -50,6 +50,11 @@ export default {
     border-width: 1px;
 
     margin: 5px;
+
+    animation-name: pop;
+    animation-duration: 0.05s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
   }
   .content {
     padding: 0px 5px 0px 15px;
@@ -127,5 +132,11 @@ export default {
     0% {transform: scale(1);}
     40% {transform: scale(0.9);}
     100% {transform: scale(0.8);}
+  }
+
+  @keyframes pop {
+    0% {transform: scale(0.6);}
+    40% {transform: scale(0.8);}
+    100% {transform: scale(1);}
   }
 </style>
