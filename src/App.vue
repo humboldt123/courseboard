@@ -1,11 +1,8 @@
 <template>
-  <div class="fullscreen" @dblclick="addCard()">
-    <div v-if="getCourseArray.length === 0">
-      <div class="info">
-        <div>
-          <p>Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
-        </div>
-      </div>
+  <EditCourseModal/>
+  <div @dblclick="addCourseCard()" class="fullscreen">
+    <div v-if="courseArray.length === 0" class="fullscreen grid-center">
+      <p v-if="modalVisible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
     </div>
     <div v-else>
       <draggable
@@ -23,7 +20,7 @@
 
           handle=".handle"
         >
-        <template v-for="(course, i) in getCourseArray" :key="i">
+        <template v-for="(course, i) in courseArray" :key="i">
           <CourseCard
             :name="course.name"
             :section="course.section"
@@ -42,11 +39,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
 import { VueDraggableNext } from 'vue-draggable-next';
 
 import CourseCard from './components/CourseCard.vue';
-import EditCourseModal from "./components/EditCourseModal.vue";
+import EditCourseModal from './components/EditCourseModal.vue'
 
 import { store } from "./store"
 
@@ -55,7 +51,8 @@ export default {
   name: 'App',
   components: {
     draggable: VueDraggableNext,
-    CourseCard
+    CourseCard,
+    EditCourseModal
   },
   data() {
     return {
@@ -63,27 +60,28 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      getCourseArray: "getCourseArray"
-    }),
-    draggableCards: {
+    modalVisible: {
+      get() {
+        return store.state.modalVisible;
+      },
+      set(val) {
+        store.commit("setModalVisible", val);
+      },
+    },
+    courseArray: {
       get() {
         return store.state.courseArray;
       },
       set(val) {
         store.commit("setCourseArray", val);
       },
-    }
+    },
   },
   methods: {  
-    ...mapMutations({
-      setcourseArray: "setCourseArray"
-    }),
-    addCard() {
-        //this.draggableCards.push({})
-        alert("hi");
-        EditCourseModal.visible = true;
-    }
+    addCourseCard() {
+        this.modalVisible = true;
+        // Rest of the logic
+    },
   }
 }
 </script>
@@ -94,11 +92,9 @@ export default {
   height: 100vh;
 }
 
-.info {
-  display: flex;
-  justify-content: center;
-  width: auto;
-  height: 100vh;
+.grid-center {
+  display: grid;
+  place-items: center;
 }
 
 .info > div {
