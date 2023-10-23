@@ -1,6 +1,6 @@
 <template>
   <EditCourseModal/>
-  <div @dblclick="addCourseCard()" class="fullscreen">
+  <div @dblclick="modalVisible = true" class="fullscreen">
     <div v-if="courseArray.length === 0" class="fullscreen grid-center">
       <p v-if="modalVisible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
     </div>
@@ -77,12 +77,6 @@ export default {
       },
     },
   },
-  methods: {  
-    addCourseCard() {
-        this.modalVisible = true;
-        // Rest of the logic
-    },
-  }
 }
 </script>
 

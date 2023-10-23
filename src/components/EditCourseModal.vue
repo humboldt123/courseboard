@@ -35,10 +35,12 @@
                 
                 <input v-model="banner" placeholder="https://i.imgur.com/5VRrVNk.png" />
                 <span class="label">Banner URL</span>
+                
+                <span v-if="hint" class="hint label">You must fill out all fields marked with a (*)</span>
 
                 <div style="display: flex; justify-content: space-evenly; padding-top: 8px;">
-                  <button class="pink" @click="modalVisible = false">Cancel</button>
-                  <button class="cyan" @click="modalVisible = false">{{ course_index > -1 ? course_index : "Create" }}</button>
+                  <button class="pink" @click="closeModal();">Cancel</button>
+                  <button class="cyan" @click="addCard();">{{ course_index > -1 ? course_index : "Create" }}</button>
                 </div>
               </div>
             </div>
@@ -46,6 +48,79 @@
       </Transition>
     </Teleport>
 </template>
+
+<script>
+import { store } from "../store"
+
+export default {
+  name: 'EditCourseModal',
+  data() {
+    return {
+      hint: false
+    }
+  },
+  props: {
+
+  },
+  computed: {
+    modalVisible: {
+      get() {
+        return store.state.modalVisible;
+      },
+      set(val) {
+        store.commit("setModalVisible", val);
+      },
+    },
+    courseArray: {
+      get() {
+        return store.state.courseArray;
+      },
+      set(val) {
+        store.commit("setCourseArray", val);
+      },
+    },
+  },
+  methods: {  
+    closeModal() {
+      this.modalVisible = false;
+      this.hint = false;
+      this.clearInputs();
+    },
+    addCard() {
+      if (!this.name || !this.professor || !this.link) {
+        this.hint = true;
+      } else {
+        this.courseArray.push({
+          name: this.name,
+          section: this.section || "",
+          professor: this.professor,
+
+          link: this.link,
+
+          banner: this.banner || "",
+          notes: this.notes || "",
+
+          discord: this.discord || "",
+          syllabus: this.syllabus || "",
+          custom_link: this.custom_link || "",
+        });
+      this.closeModal();
+      }
+    },
+    clearInputs() {
+      this.name = "";
+      this.section = "";
+      this.professor = "";
+      this.link = "";
+      this.notes = "";
+      this.discord = "";
+      this.syllabus = "";
+      this.custom_link = "";
+      this.banner = "";
+    }
+  },
+}
+</script>
 
 <style scoped>
   /* wrapper */
@@ -133,6 +208,12 @@
     font-size: xx-large;
   }
 
+  /* hint */
+  .hint {
+    text-align: center;
+    color: var(--red);
+  }
+
   /* input label */
   .label {
     font-size: small;
@@ -188,24 +269,3 @@
     background-color: var(--darkpink);
   }
 </style>
-
-<script>
-import { store } from "../store"
-
-export default {
-  name: 'EditCourseModal',
-  props: {
-    course_index: Number
-  },
-  computed: {
-    modalVisible: {
-      get() {
-        return store.state.modalVisible;
-      },
-      set(val) {
-        store.commit("setModalVisible", val);
-      },
-    },
-  },
-}
-</script>

@@ -112,6 +112,8 @@ export default {
     position: relative;
     overflow: hidden;
 
+    background-color: var(--chalkboard-green);
+
     border-radius: 5px 5px 0 0;
 
     width: 100%;
