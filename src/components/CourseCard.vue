@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'CourseDisplay',
+  name: 'CourseCard',
   props: {
     name: String,
     section: String,
@@ -118,8 +118,10 @@ export default {
     height: 8em;
   }
 
-  /* Get rid of the ghost of the div that appears when we pick them up */
-  .pickable { display: none; }
+  /* get rid of the ghost of the div that appears when we pick them up */
+  .pickable {
+    display: none;
+  }
 
   .shadow > div {
     animation-name: shrink;
@@ -128,6 +130,7 @@ export default {
     animation-fill-mode: forwards;
   }
 
+  /* animations */
   @keyframes shrink {
     0% {transform: scale(1);}
     40% {transform: scale(0.9);}
