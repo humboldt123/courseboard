@@ -3,8 +3,8 @@
     <div class="course">
       <div class="banner" :style="{ backgroundImage: 'url(' + (banner.length > 0 ? banner : 'https://i.imgur.com/5VRrVNk.png') + ')' }"/>
       <div class="content">
-        <h1 class="name cutoff">{{ name }} <span v-if="section.length > 0">[{{ section }}]</span></h1>
-        <p class="professor cutoff">Professor: {{ professor }}</p>
+        <h1 class="name cutoff" style="user-select: none;">{{ name }} <span v-if="section.length > 0">[{{ section }}]</span></h1>
+        <p class="professor cutoff" style="user-select: none;">Professor: {{ professor }}</p>
         <p class="notes scroll">
           {{ notes }}
         </p>
@@ -44,7 +44,7 @@ export default {
 <style scoped>
   .course {
     border-color: var(--darker);
-    box-shadow: 0 0 5px rgba(5, 5, 5, 0.9);
+    box-shadow: 0 0 5px var(--shadow);
 
     border-radius: 5px;
     border-width: 1px;
