@@ -129,7 +129,7 @@ export default {
           syllabus: this.course_data.syllabus || "",
           custom_link: this.course_data.custom_link || "",
 
-          position: this.courseArray.length
+          position: this.course_data.position
         };
       this.closeModal();
       }

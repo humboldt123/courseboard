@@ -139,10 +139,6 @@ export default {
     cursor: grab;
   }
 
-  .mutate {
-    cursor: pointer;
-  }
-
   .red {
     color: var(--darkred);
   }
