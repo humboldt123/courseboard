@@ -2,7 +2,7 @@
   <EditCourseModal/>
   <div @dblclick="addCourse" class="fullscreen">
     <div v-if="courseArray.length === 0" class="fullscreen grid-center">
-      <p v-if="modalVisible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
+      <p v-if="modal.visible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
     </div>
     <div v-else>
       <draggable
@@ -62,12 +62,12 @@ export default {
     }
   },
   computed: {
-    modalVisible: {
+    modal: {
       get() {
-        return store.state.modalVisible;
+        return store.state.modal;
       },
       set(val) {
-        store.commit("setModalVisible", val);
+        store.commit("setModal", val);
       },
     },
     courseArray: {
@@ -99,7 +99,7 @@ export default {
     addCourse(event) {
       // Make sure the user is clicking in the empty space
       if (event.target.classList[0] == "card-holder" || event.target.classList[0] == "fullscreen") {
-        this.modalVisible = true;
+        this.modal.visible = true;
       }
     },
     updateCardPositions(event) {
@@ -109,7 +109,7 @@ export default {
 
       let origin = event.oldIndex;
       let target = event.newIndex;
-      let i = this.courseArray.findIndex(card => card.position === origin);
+      let index = this.courseArray.findIndex(card => card.position === origin);
       this.courseArray.forEach(card => {
         if (target > origin) {
           if (card.position > origin && card.position <= target) {
@@ -121,7 +121,7 @@ export default {
           }
         }
       });
-      this.courseArray[i].position = target;
+      this.courseArray[index].position = target;
     },
     onKeyDown(event) {
       if (event.key == 'Control') {

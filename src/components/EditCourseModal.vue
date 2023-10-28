@@ -1,7 +1,7 @@
 <template>
     <Teleport to="body">
       <Transition name="edit-course-modal">
-        <div v-if="modalVisible" class="wrapper fullscreen grid-center">
+        <div v-if="modal.visible" class="wrapper fullscreen grid-center">
             <div class="modal">
               <div class="content">
                 <h1 class="title">{{ course_index > -1 ? course_index : "Add" }} Course</h1>
@@ -60,12 +60,12 @@ export default {
     }
   },
   computed: {
-    modalVisible: {
+    modal: {
       get() {
-        return store.state.modalVisible;
+        return store.state.modal;
       },
       set(val) {
-        store.commit("setModalVisible", val);
+        store.commit("setModal", val);
       },
     },
     courseArray: {
@@ -79,7 +79,7 @@ export default {
   },
   methods: {  
     closeModal() {
-      this.modalVisible = false;
+      this.modal.visible = false;
       this.hint = false;
       this.clearInputs();
     },
@@ -100,7 +100,7 @@ export default {
           discord: this.discord || "",
           syllabus: this.syllabus || "",
           custom_link: this.custom_link || "",
-          
+
           position: this.courseArray.length
         });
       this.closeModal();

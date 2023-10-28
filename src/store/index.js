@@ -64,21 +64,25 @@ export const store = createStore({
   
         position: 3
       }, ],
-      modalVisible: false,
+      modal: {
+        visible: false,
+        editMode: false,
+        item: -1,
+      },
       controlPressed: false,
     }
   },
   getters: {
       getCourseArray: state => state.courseArray,
-      getModalVisible: state => state.modalVisible,
+      getModal: state => state.modal,
       getControlPressed: state => state.controlPressed,
   },
   mutations: {
       setCourseArray(state, payload) {
           state.courseArray = payload;
       },
-      setModalVisible(state, payload) {
-        state.modalVisible = payload;
+      setModal(state, payload) {
+        state.modal = payload;
       },
       setControlPressed(state, payload) {
         state.controlPressed = payload;

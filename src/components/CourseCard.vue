@@ -15,7 +15,7 @@
           <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
       </div>
       <div class="actions-container">
-        <span class="material-symbols-outlined mutate cyan" v-if="controlPressed" @click="edit();">edit</span>
+        <span class="material-symbols-outlined mutate" v-if="controlPressed" @click="edit();">edit</span>
         <span class="material-symbols-outlined handle" v-if="!controlPressed">drag_handle</span>
       </div>
     </div>
@@ -66,8 +66,8 @@ export default {
   },
   methods: {
     edit() {
-      console.log(this.$.vnode.key);
-      console.log(JSON.parse(JSON.stringify(this.courseArray)).map(x => x.name))
+      let index = this.$.vnode.key;
+      console.log(this.courseArray[index])
     },
   }
 }
