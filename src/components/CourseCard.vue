@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @dblclick="edit();">
     <div class="course">
       <div class="banner" :style="{ backgroundImage: 'url(' + (banner.length > 0 ? banner : 'https://i.imgur.com/5VRrVNk.png') + ')' }"/>
       <div class="content">
@@ -10,13 +10,12 @@
         </p>
       </div>
       <div class="links-container">
-          <a :href="syllabus" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">assignment</span></a>
-          <a :href="discord" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">forum</span></a>
-          <a :href="custom_link" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">captive_portal</span></a>
+          <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
+          <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
+          <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
       </div>
       <div class="actions-container">
-        <span class="material-symbols-outlined mutate" v-if="controlPressed" @click="edit();">edit</span>
-        <span class="material-symbols-outlined handle" v-if="!controlPressed">drag_handle</span>
+        <span class="material-symbols-outlined handle">drag_handle</span>
       </div>
     </div>
   </div>
@@ -44,14 +43,6 @@ export default {
     position: Number
   },
   computed: {
-    controlPressed: {
-      get() {
-        return store.state.controlPressed;
-      },
-      set(val) {
-        store.commit("setControlPressed", val);
-      },
-    },
     courseArray: {
       get() {
         return store.state.courseArray;

@@ -69,13 +69,11 @@ export const store = createStore({
         editMode: false,
         item: -1,
       },
-      controlPressed: false,
     }
   },
   getters: {
       getCourseArray: state => state.courseArray,
       getModal: state => state.modal,
-      getControlPressed: state => state.controlPressed,
   },
   mutations: {
       setCourseArray(state, payload) {
@@ -84,8 +82,5 @@ export const store = createStore({
       setModal(state, payload) {
         state.modal = payload;
       },
-      setControlPressed(state, payload) {
-        state.controlPressed = payload;
-      }
   }
 });

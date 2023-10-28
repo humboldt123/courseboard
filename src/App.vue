@@ -2,7 +2,7 @@
   <EditCourseModal/>
   <div @dblclick="addCourse" class="fullscreen">
     <div v-if="courseArray.length === 0" class="fullscreen grid-center">
-      <p v-if="modal.visible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
+      <p v-if="modal.visible == false">Double-click an empty space to add a course. Double-click a course to delete or edit.</p>
     </div>
     <div v-else>
       <draggable
@@ -78,14 +78,6 @@ export default {
         store.commit("setCourseArray", val);
       },
     },
-    controlPressed: {
-      get() {
-        return store.state.controlPressed;
-      },
-      set(val) {
-        store.commit("setControlPressed", val);
-      },
-    },
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown);
@@ -124,16 +116,6 @@ export default {
         }
       });
       this.courseArray[index].position = target;
-    },
-    onKeyDown(event) {
-      if (event.key == 'Control') {
-        this.controlPressed = true;
-      }
-    },
-    onKeyUp(event) {
-      if (event.key == 'Control') {
-        this.controlPressed = false;
-      }
     },
   }
 }
