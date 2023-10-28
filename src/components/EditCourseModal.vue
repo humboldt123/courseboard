@@ -135,6 +135,7 @@ export default {
       }
     },
     fillInputs() {
+      // clone card
       this.course_data = {...this.courseArray[this.modal.item]};
     },
   },
