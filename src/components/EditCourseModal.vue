@@ -1,46 +1,49 @@
 <template>
     <Teleport to="body">
-      <Transition name="edit-course-modal">
+      <Transition 
+        name="edit-course-modal"
+        @enter="fillInputs"
+      >
         <div v-if="modal.visible" class="wrapper fullscreen grid-center">
             <div class="modal">
               <div class="content">
-                <h1 class="title">{{ course_index > -1 ? course_index : "Add" }} Course</h1>
+                <h1 class="title">{{ modal.editMode ? "Edit" : "Add" }} Course</h1>
                 
                 <div style="display: grid; grid-template-columns: 70% 30%">
                   <div style="display: flex; flex-direction: column;">
-                    <input v-model="name" placeholder="PKMN 101" />
+                    <input v-model="course_data.name" placeholder="PKMN 101"/>
                     <span class="label">Course*</span>
                   </div>
                   <div style="display: flex; flex-direction: column;">
-                    <input v-model="section" placeholder="E" />
+                    <input v-model="course_data.section" placeholder="E" />
                     <span class="label">Section</span>
                   </div>
                 </div>
 
-                <input v-model="professor" placeholder="Professor Juniper" />
+                <input v-model="course_data.professor" placeholder="Professor Juniper" />
                 <span class="label">Professor*</span>
 
-                <input v-model="link" placeholder="https://courses.edu/course/12345678" />
-                <span class="label">Link to Course Page*</span>
+                <input v-model="course_data.link" placeholder="https://courses.edu/course/12345678" />
+                <span class="label">Course Page* <span class="material-symbols-outlined inline-icon">link</span></span>
 
-                <input v-model="notes" placeholder="One of the courses ever!!!" />
+                <input v-model="course_data.notes" placeholder="One of the courses ever!!!" />
                 <span class="label">About</span>
 
-                <input v-model="discord" placeholder="https://courses.edu/course/12345678/forums" />
-                <span class="label">Talk Page</span>
-                <input v-model="syllabus" placeholder="https://courses.edu/course/12345678/syllabus" />
-                <span class="label">Syllabus URL</span>
-                <input v-model="custom_link" placeholder="https://bigrat.monster" />
-                <span class="label">Extra Link</span>
+                <input v-model="course_data.discord" placeholder="https://courses.edu/course/12345678/forums" />
+                <span class="label">Talk Page <span class="material-symbols-outlined inline-icon">link</span></span>
+                <input v-model="course_data.syllabus" placeholder="https://courses.edu/course/12345678/syllabus" />
+                <span class="label">Syllabus <span class="material-symbols-outlined inline-icon">link</span></span>
+                <input v-model="course_data.custom_link" placeholder="https://bigrat.monster" />
+                <span class="label">Extra Link <span class="material-symbols-outlined inline-icon">link</span></span>
                 
-                <input v-model="banner" placeholder="https://i.imgur.com/5VRrVNk.png" />
-                <span class="label">Banner URL</span>
+                <input v-model="course_data.banner" placeholder="https://i.imgur.com/5VRrVNk.png" />
+                <span class="label">Banner URL <span class="material-symbols-outlined inline-icon">link</span></span>
                 
                 <span v-if="hint" class="hint label">You must fill out all fields marked with a (*)</span>
 
                 <div style="display: flex; justify-content: space-evenly; padding-top: 8px;">
                   <button class="pink" @click="closeModal();">Cancel</button>
-                  <button class="cyan" @click="addCard();">{{ course_index > -1 ? course_index : "Create" }}</button>
+                  <button class="cyan" @click="modal.editMode ? saveCard() : addCard();">{{ modal.editMode ? "Save" : "Add" }}</button>
                 </div>
               </div>
             </div>
@@ -56,7 +59,9 @@ export default {
   name: 'EditCourseModal',
   data() {
     return {
-      hint: false
+      hint: false,
+      course_data: {
+      }
     }
   },
   computed: {
@@ -77,46 +82,61 @@ export default {
       },
     },
   },
-  methods: {  
+  methods: {
     closeModal() {
       this.modal.visible = false;
       this.hint = false;
-      this.clearInputs();
+      this.course_data = {};
     },
     addCard() {
-      if (!this.name || !this.professor || !this.link) {
+      if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
         this.hint = true;
       } else {
         this.courseArray.push({
-          name: this.name,
-          section: this.section || "",
-          professor: this.professor,
+          name: this.course_data.name,
+          section: this.course_data.section || "",
+          professor: this.course_data.professor,
 
-          link: this.link,
+          link: this.course_data.link,
 
-          banner: this.banner || "",
-          notes: this.notes || "",
+          banner: this.course_data.banner || "",
+          notes: this.course_data.notes || "",
 
-          discord: this.discord || "",
-          syllabus: this.syllabus || "",
-          custom_link: this.custom_link || "",
+          discord: this.course_data.discord || "",
+          syllabus: this.course_data.syllabus || "",
+          custom_link: this.course_data.custom_link || "",
 
           position: this.courseArray.length
         });
       this.closeModal();
       }
     },
-    clearInputs() {
-      this.name = "";
-      this.section = "";
-      this.professor = "";
-      this.link = "";
-      this.notes = "";
-      this.discord = "";
-      this.syllabus = "";
-      this.custom_link = "";
-      this.banner = "";
-    }
+    saveCard() {
+      if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
+        this.hint = true;
+      } else {
+        this.courseArray[this.modal.item] = {
+          name: this.course_data.name,
+          section: this.course_data.section || "",
+          professor: this.course_data.professor,
+
+          link: this.course_data.link,
+
+          banner: this.course_data.banner || "",
+          notes: this.course_data.notes || "",
+
+          discord: this.course_data.discord || "",
+          syllabus: this.course_data.syllabus || "",
+          custom_link: this.course_data.custom_link || "",
+
+          position: this.courseArray.length
+        };
+      this.closeModal();
+      }
+    },
+    fillInputs() {
+      this.course_data = {...this.courseArray[this.modal.item]};
+    },
   },
 }
 </script>
@@ -266,5 +286,12 @@ export default {
 
   .pink:focus {
     background-color: var(--darkpink);
+  }
+
+  .inline-icon {
+    color: var(--dark);
+    position: relative;
+    font-size: 1.5em;
+    top: .3em;
   }
 </style>

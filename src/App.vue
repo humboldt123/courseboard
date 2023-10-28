@@ -99,6 +99,8 @@ export default {
     addCourse(event) {
       // Make sure the user is clicking in the empty space
       if (event.target.classList[0] == "card-holder" || event.target.classList[0] == "fullscreen") {
+        this.modal.editMode = false;
+        this.modal.item = -1;
         this.modal.visible = true;
       }
     },

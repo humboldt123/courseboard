@@ -10,9 +10,9 @@
         </p>
       </div>
       <div class="links-container">
-          <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
-          <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
-          <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
+          <a :href="syllabus" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">assignment</span></a>
+          <a :href="discord" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">forum</span></a>
+          <a :href="custom_link" target="_blank" v-if="!controlPressed"><span class="material-symbols-outlined">captive_portal</span></a>
       </div>
       <div class="actions-container">
         <span class="material-symbols-outlined mutate" v-if="controlPressed" @click="edit();">edit</span>
@@ -44,9 +44,6 @@ export default {
     position: Number
   },
   computed: {
-    isControlPressed() {
-      return store.state.controlPressed;
-    },
     controlPressed: {
       get() {
         return store.state.controlPressed;
@@ -63,11 +60,21 @@ export default {
         store.commit("setCourseArray", val);
       },
     },
+    modal: {
+      get() {
+        return store.state.modal;
+      },
+      set(val) {
+        store.commit("setModal", val);
+      },
+    },
   },
   methods: {
     edit() {
       let index = this.$.vnode.key;
-      console.log(this.courseArray[index])
+      this.modal.item = index;
+      this.modal.editMode = true;
+      this.modal.visible = true;
     },
   }
 }
