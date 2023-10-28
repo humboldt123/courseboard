@@ -59,9 +59,6 @@ export default {
       hint: false
     }
   },
-  props: {
-
-  },
   computed: {
     modalVisible: {
       get() {
@@ -103,6 +100,8 @@ export default {
           discord: this.discord || "",
           syllabus: this.syllabus || "",
           custom_link: this.custom_link || "",
+          
+          position: this.courseArray.length
         });
       this.closeModal();
       }

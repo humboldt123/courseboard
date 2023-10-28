@@ -6,7 +6,7 @@
         <h1 class="name cutoff" style="user-select: none;">{{ name }} <span v-if="section.length > 0">[{{ section }}]</span></h1>
         <p class="professor cutoff" style="user-select: none;">Professor: {{ professor }}</p>
         <p class="notes scroll">
-          {{ notes }}
+          {{ notes }} 
         </p>
       </div>
       <div class="links-container">
@@ -14,14 +14,18 @@
           <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
           <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
       </div>
-      <div class="handle-container">
-        <span class="material-symbols-outlined handle">drag_handle</span>
+      <div class="actions-container">
+        <span class="material-symbols-outlined mutate cyan" v-if="controlPressed" @click="edit();">edit</span>
+        <span class="material-symbols-outlined handle" v-if="controlPressed">drag_handle</span>
+        <span class="material-symbols-outlined mutate red" v-if="controlPressed">delete</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { store } from "../store"
+
 export default {
   name: 'CourseCard',
   props: {
@@ -36,7 +40,33 @@ export default {
 
     discord: String,
     syllabus: String,
-    custom_link: String
+    custom_link: String,
+
+    position: Number
+  },
+  computed: {
+    controlPressed: {
+      get() {
+        return store.state.controlPressed;
+      },
+      set(val) {
+        store.commit("setControlPressed", val);
+      },
+    },
+    courseArray: {
+      get() {
+        return store.state.courseArray;
+      },
+      set(val) {
+        store.commit("setCourseArray", val);
+      },
+    },
+  },
+  methods: {
+    edit() {
+      console.log(this.$.vnode.key);
+      console.log(JSON.parse(JSON.stringify(this.courseArray)).map(x => x.name))
+    },
   }
 }
 </script>
@@ -98,14 +128,29 @@ export default {
     color: var(--superdark);
   }
 
-  .handle-container {
+  .actions-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    padding: 3px 5px 8px 5px;
   }
+
+
   .handle {
     cursor: grab;
-    margin: 0 5px 5px 5px;
   }
+
+  .mutate {
+    cursor: pointer;
+  }
+
+  .red {
+    color: var(--darkred);
+  }
+
+  .cyan {
+    color: var(--darkcyan);
+  }
+
 
   .banner {
     background-size: cover;

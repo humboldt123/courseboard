@@ -1,6 +1,6 @@
 <template>
   <EditCourseModal/>
-  <div @dblclick="modalVisible = true" class="fullscreen">
+  <div @dblclick="addCourse" class="fullscreen">
     <div v-if="courseArray.length === 0" class="fullscreen grid-center">
       <p v-if="modalVisible == false">Double-click to add a course. Hold down [CONTROL] to delete or edit.</p>
     </div>
@@ -16,12 +16,13 @@
           ghost-class="shadow"
 
           @start="drag = true;"
-          @end="drag = false;"
+          @end="this.drag = false;"
+
+          @update="updateCardPositions"
 
           handle=".handle"
         >
-        <template v-for="(course, i) in courseArray" :key="i">
-          <CourseCard
+        <CourseCard v-for="(course, i) in courseArray"
             :name="course.name"
             :section="course.section"
             :professor="course.professor"
@@ -31,8 +32,9 @@
             :discord="course.discord"
             :syllabus="course.syllabus"
             :custom_link="course.custom_link"
+            :position="course.position"
+            :key="i"
           />
-        </template>
       </draggable>
     </div>
   </div>
@@ -77,6 +79,35 @@ export default {
       },
     },
   },
+  methods: {
+    addCourse(event) {
+      // Make sure the user is clicking in the empty space
+      if (event.target.classList[0] == "card-holder" || event.target.classList[0] == "fullscreen") {
+        this.modalVisible = true;
+      }
+    },
+    updateCardPositions(event) {
+      // vue-draggable doesn't like me updating the indices of the array
+      // so we use this hack to keep track of the real "position"
+      // the array will sort itself according to position on page load 
+
+      let origin = event.oldIndex;
+      let target = event.newIndex;
+      let i = this.courseArray.findIndex(card => card.position === origin);
+      this.courseArray.forEach(card => {
+        if (target > origin) {
+          if (card.position > origin && card.position <= target) {
+            card.position -= 1;
+          }
+        } else if (origin > target) {
+          if (card.position >= target && card.position < origin) {
+            card.position += 1; 
+          }
+        }
+      });
+      this.courseArray[i].position = target;
+    },
+  }
 }
 </script>
 
