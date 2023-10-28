@@ -78,6 +78,22 @@ export default {
         store.commit("setCourseArray", val);
       },
     },
+    controlPressed: {
+      get() {
+        return store.state.controlPressed;
+      },
+      set(val) {
+        store.commit("setControlPressed", val);
+      },
+    },
+  },
+  created() {
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
+  },
+  unmounted() {
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
   },
   methods: {
     addCourse(event) {
@@ -106,6 +122,16 @@ export default {
         }
       });
       this.courseArray[i].position = target;
+    },
+    onKeyDown(event) {
+      if (event.key == 'Control') {
+        this.controlPressed = true;
+      }
+    },
+    onKeyUp(event) {
+      if (event.key == 'Control') {
+        this.controlPressed = false;
+      }
     },
   }
 }

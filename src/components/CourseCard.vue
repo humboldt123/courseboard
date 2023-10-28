@@ -16,8 +16,7 @@
       </div>
       <div class="actions-container">
         <span class="material-symbols-outlined mutate cyan" v-if="controlPressed" @click="edit();">edit</span>
-        <span class="material-symbols-outlined handle" v-if="controlPressed">drag_handle</span>
-        <span class="material-symbols-outlined mutate red" v-if="controlPressed">delete</span>
+        <span class="material-symbols-outlined handle" v-if="!controlPressed">drag_handle</span>
       </div>
     </div>
   </div>
@@ -45,6 +44,9 @@ export default {
     position: Number
   },
   computed: {
+    isControlPressed() {
+      return store.state.controlPressed;
+    },
     controlPressed: {
       get() {
         return store.state.controlPressed;

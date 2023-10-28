@@ -65,7 +65,7 @@ export const store = createStore({
         position: 3
       }, ],
       modalVisible: false,
-      controlPressed: true,
+      controlPressed: false,
     }
   },
   getters: {
