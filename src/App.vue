@@ -63,29 +63,13 @@ export default {
   },
   computed: {
     modal: {
-      get() {
-        return store.state.modal;
-      },
-      set(val) {
-        store.commit("setModal", val);
-      },
+      get() { return store.state.modal; },
+      set(val) { store.commit("setModal", val); }
     },
     courses: {
-      get() {
-        return store.state.courses;
-      },
-      set(val) {
-        store.commit("setcourses", val);
-      },
+      get() { return store.state.courses; },
+      set(val) { store.commit("setCourses", val); }
     },
-  },
-  created() {
-    window.addEventListener('keydown', this.onKeyDown);
-    window.addEventListener('keyup', this.onKeyUp);
-  },
-  unmounted() {
-    window.removeEventListener('keydown', this.onKeyDown);
-    window.removeEventListener('keyup', this.onKeyUp);
   },
   methods: {
     addCourse(event) {

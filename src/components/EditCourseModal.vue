@@ -67,21 +67,19 @@ export default {
   },
   computed: {
     modal: {
-      get() {
-        return store.state.modal;
-      },
-      set(val) {
-        store.commit("setModal", val);
-      },
+      get() { return store.state.modal; },
+      set(val) { store.commit("setModal", val); }
     },
     courses: {
-      get() {
-        return store.state.courses;
-      },
-      set(val) {
-        store.commit("setcourses", val);
-      },
+      get() { return store.state.courses; },
+      set(val) { store.commit("setCourses", val); }
     },
+  },
+  created() {
+    window.addEventListener('keydown', this.onKeyDown);
+  },
+  unmounted() {
+    window.removeEventListener('keydown', this.onKeyDown);
   },
   methods: {
     closeModal() {
@@ -156,6 +154,13 @@ export default {
       // clone card
       this.course_data = {...this.courses[this.modal.item]};
     },
+    onKeyDown(event) {
+      if (this.modal.visible) {
+        if (event.key == "Escape") {
+          this.closeModal();
+        }
+      }
+    }
   },
 }
 </script>

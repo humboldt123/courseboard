@@ -2,7 +2,7 @@
   <div @dblclick="edit();">
     <div class="course">
       <a :href="link">
-        <div class="banner" :style="{backgroundImage: 'url(' + banner + '), url(' + require('@/assets/default_banner.png') + ')'}"/>
+        <div class="banner" :style="{backgroundImage: 'url(' + banner + '), url(' + require('@/assets/images/default_banner.png') + ')'}"/>
       </a>
       <div class="content">
        <h1 class="name cutoff" style="user-select: none;">{{ name }}<span v-if="section.length > 0"> [{{ section }}]</span></h1>
@@ -12,6 +12,7 @@
         </p>
       </div>
       <div class="links-container">
+          <!-- invisible v-elses are a hack to maintain spacing -->
           <a :href="syllabus" target="_blank" v-if="isValidLink('syllabus')"><span class="material-symbols-outlined">assignment</span></a>
           <span v-else class="material-symbols-outlined invisible">assignment</span>
           <a :href="discord" target="_blank" v-if="isValidLink('discord')"><span class="material-symbols-outlined">forum</span></a>
@@ -49,20 +50,12 @@ export default {
   },
   computed: {
     courses: {
-      get() {
-        return store.state.courses;
-      },
-      set(val) {
-        store.commit("setcourses", val);
-      },
+      get() { return store.state.courses; },
+      set(val) { store.commit("setCourses", val); }
     },
     modal: {
-      get() {
-        return store.state.modal;
-      },
-      set(val) {
-        store.commit("setModal", val);
-      },
+      get() { return store.state.modal; },
+      set(val) { store.commit("setModal", val); }
     },
   },
   methods: {
@@ -136,7 +129,6 @@ export default {
     color: var(--superdark);
   }
 
-  /* hack to maintain spacing */
   .invisible {
     color: var(--transparent);
   }
