@@ -39,7 +39,7 @@
                 <input v-model="course_data.banner" placeholder="https://i.imgur.com/5VRrVNk.png" />
                 <span class="label">Banner URL <span class="material-symbols-outlined inline-icon">link</span></span>
                 
-                <span v-if="hint" class="hint label">You must fill out all fields marked with a (*)</span>
+                <span v-if="warn.visible" class="warn label">{{ warn.text }}</span>
 
                 <div style="display: flex; justify-content: space-evenly; padding-top: 8px;">
                   <button class="pink" v-if="modal.editMode" @click="deleteCard();">Delete</button>
@@ -56,13 +56,24 @@
 <script>
 import { store } from "../store"
 
+// URL Pattern from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
+const urlPattern = new RegExp(
+  '^(https?:\\/\\/)?' +
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+  '((\\d{1,3}\\.){3}\\d{1,3}))' +
+  '(\\:\\d+)?' +
+  '(\\/[-a-z\\d%_.~+:]*)*' +
+  '(\\?[;&a-z\\d%_.~+=\\-:]*)?' +
+  '(\\#[-a-z\\d_:]*)?$','i'
+);
+
+
 export default {
   name: 'EditCourseModal',
   data() {
     return {
-      hint: false,
-      course_data: {
-      }
+      warn: {visible: false, text: ""},
+      course_data: {}
     }
   },
   computed: {
@@ -84,7 +95,7 @@ export default {
   methods: {
     closeModal() {
       this.modal.visible = false;
-      this.hint = false;
+      this.warn.visible = false;
       this.course_data = {};
       // update localStorage
       window.localStorage.setItem("courses", JSON.stringify(this.courses));
@@ -103,10 +114,29 @@ export default {
       })
       this.closeModal();
     },
-    // TODO: in both add and save validate all the urls
+    isValidURL(url) {
+      return !!urlPattern.test(url);
+    },
+    isEmptyOrValidURL(url) {
+      return !url || this.isValidURL(url);
+    },
+    requiredFieldsFilled() {
+      return this.course_data.name && this.course_data.professor && this.course_data.link;
+    },
+    linksEmptyOrValidURL() {
+      return this.isEmptyOrValidURL(this.course_data.link) &&
+            this.isEmptyOrValidURL(this.course_data.discord) &&
+            this.isEmptyOrValidURL(this.course_data.syllabus) &&
+            this.isEmptyOrValidURL(this.course_data.custom_link) &&
+            this.isEmptyOrValidURL(this.course_data.banner);   
+    },
     addCard() {
-      if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
-        this.hint = true;
+      if (!this.requiredFieldsFilled()) {
+        this.warn.text = "You must fill out all fields marked with a (*)";
+        this.warn.visible = true;
+      } else if (!this.linksEmptyOrValidURL()) {
+        this.warn.text = "Not a valid URL!";
+        this.warn.visible = true;
       } else {
         this.courses.push({
           name: this.course_data.name,
@@ -128,8 +158,12 @@ export default {
       }
     },
     saveCard() {
-      if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
-        this.hint = true;
+      if (!this.requiredFieldsFilled()) {
+        this.warn.text = "You must fill out all fields marked with a (*)";
+        this.warn.visible = true;
+      } else if (!this.linksEmptyOrValidURL()) {
+        this.warn.text = "Not a valid URL!";
+        this.warn.visible = true;
       } else {
         this.courses[this.modal.item] = {
           name: this.course_data.name,
@@ -251,8 +285,8 @@ export default {
     font-size: xx-large;
   }
 
-  /* hint */
-  .hint {
+  /* warn */
+  .warn {
     text-align: center;
     color: var(--red);
   }
@@ -316,6 +350,7 @@ export default {
     color: var(--dark);
     position: relative;
     font-size: 1.5em;
+    margin-top: -1em; /* avoid extra space at the top */
     top: .3em;
   }
 </style>

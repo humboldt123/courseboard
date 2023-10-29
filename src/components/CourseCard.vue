@@ -1,6 +1,6 @@
 <template>
-  <div @dblclick="edit();">
-    <div class="course">
+  <div>
+    <div class="course" @dblclick="edit();">
       <a :href="link">
         <div class="banner" :style="{backgroundImage: 'url(' + banner + '), url(' + require('@/assets/images/default_banner.png') + ')'}"/>
       </a>
@@ -13,12 +13,10 @@
       </div>
       <div class="links-container">
           <!-- invisible v-elses are a hack to maintain spacing -->
-          <a :href="syllabus" target="_blank" v-if="isValidLink('syllabus')"><span class="material-symbols-outlined">assignment</span></a>
-          <span v-else class="material-symbols-outlined invisible">assignment</span>
-          <a :href="discord" target="_blank" v-if="isValidLink('discord')"><span class="material-symbols-outlined">forum</span></a>
-          <span v-else class="material-symbols-outlined invisible">forum</span>
-          <a :href="custom_link" target="_blank" v-if="isValidLink('custom_link')"><span class="material-symbols-outlined">captive_portal</span></a>
-          <span v-else class="material-symbols-outlined invisible">captive_portal</span>
+          <a :href="syllabus" target="_blank" v-if="propertyFilled('syllabus')"><span class="material-symbols-outlined">assignment</span></a>
+          <a :href="discord" target="_blank" v-if="propertyFilled('discord')"><span class="material-symbols-outlined">forum</span></a>
+          <a :href="custom_link" target="_blank" v-if="propertyFilled('custom_link')"><span class="material-symbols-outlined">captive_portal</span></a>
+          <span v-if="!propertyFilled('syllabus') && !propertyFilled('discord') && !propertyFilled('custom_link')" class="material-symbols-outlined invisible">category</span>
       </div>
       <div class="actions-container">
         <span class="material-symbols-outlined handle">drag_handle</span>
@@ -59,7 +57,7 @@ export default {
     },
   },
   methods: {
-    isValidLink(property) {
+    propertyFilled(property) {
       return this[property].length > 0;
     },
     edit() {
@@ -87,6 +85,7 @@ export default {
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
   }
+
   .content {
     padding: 0px 5px 0px 15px;
   }

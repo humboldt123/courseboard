@@ -1,5 +1,6 @@
 {
   "name": "courseboard",
+  "description": "Create a dashboard with links to your courses!",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
