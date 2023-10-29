@@ -42,7 +42,8 @@
                 <span v-if="hint" class="hint label">You must fill out all fields marked with a (*)</span>
 
                 <div style="display: flex; justify-content: space-evenly; padding-top: 8px;">
-                  <button class="pink" @click="closeModal();">Cancel</button>
+                  <button class="pink" v-if="modal.editMode" @click="deleteCard();">Delete</button>
+                  <button class="cyan" @click="closeModal();">Cancel</button>
                   <button class="cyan" @click="modal.editMode ? saveCard() : addCard();">{{ modal.editMode ? "Save" : "Add" }}</button>
                 </div>
               </div>
@@ -73,12 +74,12 @@ export default {
         store.commit("setModal", val);
       },
     },
-    courseArray: {
+    courses: {
       get() {
-        return store.state.courseArray;
+        return store.state.courses;
       },
       set(val) {
-        store.commit("setCourseArray", val);
+        store.commit("setcourses", val);
       },
     },
   },
@@ -87,12 +88,29 @@ export default {
       this.modal.visible = false;
       this.hint = false;
       this.course_data = {};
+      // update localStorage
+      window.localStorage.setItem("courses", JSON.stringify(this.courses));
     },
+    deleteCard() {
+      let position = this.course_data.position;
+
+      // delete card from courses
+      this.courses = this.courses.filter(card => card.position != position);
+      
+      // go through positions and shift positions back by one
+      this.courses.forEach(card => {
+        if (card.position > position) {
+          card.position -= 1;
+        }
+      })
+      this.closeModal();
+    },
+    // TODO: in both add and save validate all the urls
     addCard() {
       if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
         this.hint = true;
       } else {
-        this.courseArray.push({
+        this.courses.push({
           name: this.course_data.name,
           section: this.course_data.section || "",
           professor: this.course_data.professor,
@@ -106,16 +124,16 @@ export default {
           syllabus: this.course_data.syllabus || "",
           custom_link: this.course_data.custom_link || "",
 
-          position: this.courseArray.length
+          position: this.courses.length
         });
-      this.closeModal();
+        this.closeModal();
       }
     },
     saveCard() {
       if (!this.course_data.name || !this.course_data.professor || !this.course_data.link) {
         this.hint = true;
       } else {
-        this.courseArray[this.modal.item] = {
+        this.courses[this.modal.item] = {
           name: this.course_data.name,
           section: this.course_data.section || "",
           professor: this.course_data.professor,
@@ -131,12 +149,12 @@ export default {
 
           position: this.course_data.position
         };
-      this.closeModal();
+        this.closeModal();
       }
     },
     fillInputs() {
       // clone card
-      this.course_data = {...this.courseArray[this.modal.item]};
+      this.course_data = {...this.courses[this.modal.item]};
     },
   },
 }

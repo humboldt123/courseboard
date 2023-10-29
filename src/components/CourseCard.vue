@@ -1,18 +1,23 @@
 <template>
   <div @dblclick="edit();">
     <div class="course">
-      <div class="banner" :style="{ backgroundImage: 'url(' + (banner.length > 0 ? banner : 'https://i.imgur.com/5VRrVNk.png') + ')' }"/>
+      <a :href="link">
+        <div class="banner" :style="{backgroundImage: 'url(' + banner + '), url(' + require('@/assets/default_banner.png') + ')'}"/>
+      </a>
       <div class="content">
-        <h1 class="name cutoff" style="user-select: none;">{{ name }} <span v-if="section.length > 0">[{{ section }}]</span></h1>
+       <h1 class="name cutoff" style="user-select: none;">{{ name }}<span v-if="section.length > 0"> [{{ section }}]</span></h1>
         <p class="professor cutoff" style="user-select: none;">Professor: {{ professor }}</p>
         <p class="notes scroll">
           {{ notes }} 
         </p>
       </div>
       <div class="links-container">
-          <a :href="syllabus" target="_blank"><span class="material-symbols-outlined">assignment</span></a>
-          <a :href="discord" target="_blank"><span class="material-symbols-outlined">forum</span></a>
-          <a :href="custom_link" target="_blank"><span class="material-symbols-outlined">captive_portal</span></a>
+          <a :href="syllabus" target="_blank" v-if="isValidLink('syllabus')"><span class="material-symbols-outlined">assignment</span></a>
+          <span v-else class="material-symbols-outlined invisible">assignment</span>
+          <a :href="discord" target="_blank" v-if="isValidLink('discord')"><span class="material-symbols-outlined">forum</span></a>
+          <span v-else class="material-symbols-outlined invisible">forum</span>
+          <a :href="custom_link" target="_blank" v-if="isValidLink('custom_link')"><span class="material-symbols-outlined">captive_portal</span></a>
+          <span v-else class="material-symbols-outlined invisible">captive_portal</span>
       </div>
       <div class="actions-container">
         <span class="material-symbols-outlined handle">drag_handle</span>
@@ -43,12 +48,12 @@ export default {
     position: Number
   },
   computed: {
-    courseArray: {
+    courses: {
       get() {
-        return store.state.courseArray;
+        return store.state.courses;
       },
       set(val) {
-        store.commit("setCourseArray", val);
+        store.commit("setcourses", val);
       },
     },
     modal: {
@@ -61,6 +66,9 @@ export default {
     },
   },
   methods: {
+    isValidLink(property) {
+      return this[property].length > 0;
+    },
     edit() {
       let index = this.$.vnode.key;
       this.modal.item = index;
@@ -128,25 +136,20 @@ export default {
     color: var(--superdark);
   }
 
+  /* hack to maintain spacing */
+  .invisible {
+    color: var(--transparent);
+  }
+
   .actions-container {
     display: flex;
     justify-content: space-around;
     padding: 3px 5px 8px 5px;
   }
 
-
   .handle {
     cursor: grab;
   }
-
-  .red {
-    color: var(--darkred);
-  }
-
-  .cyan {
-    color: var(--darkcyan);
-  }
-
 
   .banner {
     background-size: cover;

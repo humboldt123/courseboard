@@ -1,7 +1,7 @@
 <template>
   <EditCourseModal/>
   <div @dblclick="addCourse" class="fullscreen">
-    <div v-if="courseArray.length === 0" class="fullscreen grid-center">
+    <div v-if="courses.length === 0" class="fullscreen grid-center">
       <p v-if="modal.visible == false">Double-click an empty space to add a course. Double-click a course to delete or edit.</p>
     </div>
     <div v-else>
@@ -22,7 +22,7 @@
 
           handle=".handle"
         >
-        <CourseCard v-for="(course, i) in courseArray"
+        <CourseCard v-for="(course, i) in courses"
             :name="course.name"
             :section="course.section"
             :professor="course.professor"
@@ -70,12 +70,12 @@ export default {
         store.commit("setModal", val);
       },
     },
-    courseArray: {
+    courses: {
       get() {
-        return store.state.courseArray;
+        return store.state.courses;
       },
       set(val) {
-        store.commit("setCourseArray", val);
+        store.commit("setcourses", val);
       },
     },
   },
@@ -103,8 +103,8 @@ export default {
 
       let origin = event.oldIndex;
       let target = event.newIndex;
-      let index = this.courseArray.findIndex(card => card.position === origin);
-      this.courseArray.forEach(card => {
+      let index = this.courses.findIndex(card => card.position === origin);
+      this.courses.forEach(card => {
         if (target > origin) {
           if (card.position > origin && card.position <= target) {
             card.position -= 1;
@@ -115,7 +115,10 @@ export default {
           }
         }
       });
-      this.courseArray[index].position = target;
+      this.courses[index].position = target;
+
+      // update our courses in localStorage
+      window.localStorage.setItem("courses", JSON.stringify(this.courses));
     },
   }
 }
