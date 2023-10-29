@@ -1,6 +1,6 @@
 <template>
     <Teleport to="body">
-      <Transition 
+      <Transition
         name="edit-course-modal"
         @enter="fillInputs"
       >
@@ -8,7 +8,7 @@
             <div class="modal">
               <div class="content">
                 <h1 class="title">{{ modal.editMode ? "Edit" : "Add" }} Course</h1>
-                
+
                 <div style="display: grid; grid-template-columns: 70% 30%">
                   <div style="display: flex; flex-direction: column;">
                     <input v-model="course_data.name" placeholder="PKMN 101"/>
@@ -35,10 +35,10 @@
                 <span class="label">Syllabus <span class="material-symbols-outlined inline-icon">link</span></span>
                 <input v-model="course_data.custom_link" placeholder="https://bigrat.monster" />
                 <span class="label">Extra Link <span class="material-symbols-outlined inline-icon">link</span></span>
-                
+
                 <input v-model="course_data.banner" placeholder="https://i.imgur.com/5VRrVNk.png" />
                 <span class="label">Banner URL <span class="material-symbols-outlined inline-icon">link</span></span>
-                
+
                 <span v-if="warn.visible" class="warn label">{{ warn.text }}</span>
 
                 <div style="display: flex; justify-content: space-evenly; padding-top: 8px;">
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { store } from "../store"
+import { store } from '../store'
 
 // URL Pattern from https://www.freecodecamp.org/news/check-if-a-javascript-string-is-a-url/
 const urlPattern = new RegExp(
@@ -64,138 +64,137 @@ const urlPattern = new RegExp(
   '(\\:\\d+)?' +
   '(\\/[-a-z\\d%_.~+:]*)*' +
   '(\\?[;&a-z\\d%_.~+=\\-:]*)?' +
-  '(\\#[-a-z\\d_:]*)?$','i'
-);
-
+  '(\\#[-a-z\\d_:]*)?$', 'i'
+)
 
 export default {
   name: 'EditCourseModal',
-  data() {
+  data () {
     return {
-      warn: {visible: false, text: ""},
+      warn: { visible: false, text: '' },
       course_data: {}
     }
   },
   computed: {
     modal: {
-      get() { return store.state.modal; },
-      set(val) { store.commit("setModal", val); }
+      get () { return store.state.modal },
+      set (val) { store.commit('setModal', val) }
     },
     courses: {
-      get() { return store.state.courses; },
-      set(val) { store.commit("setCourses", val); }
-    },
+      get () { return store.state.courses },
+      set (val) { store.commit('setCourses', val) }
+    }
   },
-  created() {
-    window.addEventListener('keydown', this.onKeyDown);
+  created () {
+    window.addEventListener('keydown', this.onKeyDown)
   },
-  unmounted() {
-    window.removeEventListener('keydown', this.onKeyDown);
+  unmounted () {
+    window.removeEventListener('keydown', this.onKeyDown)
   },
   methods: {
-    closeModal() {
-      this.modal.visible = false;
-      this.warn.visible = false;
-      this.course_data = {};
+    closeModal () {
+      this.modal.visible = false
+      this.warn.visible = false
+      this.course_data = {}
       // update localStorage
-      window.localStorage.setItem("courses", JSON.stringify(this.courses));
+      window.localStorage.setItem('courses', JSON.stringify(this.courses))
     },
-    deleteCard() {
-      let position = this.course_data.position;
+    deleteCard () {
+      const position = this.course_data.position
 
       // delete card from courses
-      this.courses = this.courses.filter(card => card.position != position);
-      
+      this.courses = this.courses.filter(card => card.position !== position)
+
       // go through positions and shift positions back by one
       this.courses.forEach(card => {
         if (card.position > position) {
-          card.position -= 1;
+          card.position -= 1
         }
       })
-      this.closeModal();
+      this.closeModal()
     },
-    isValidURL(url) {
-      return !!urlPattern.test(url);
+    isValidURL (url) {
+      return !!urlPattern.test(url)
     },
-    isEmptyOrValidURL(url) {
-      return !url || this.isValidURL(url);
+    isEmptyOrValidURL (url) {
+      return !url || this.isValidURL(url)
     },
-    requiredFieldsFilled() {
-      return this.course_data.name && this.course_data.professor && this.course_data.link;
+    requiredFieldsFilled () {
+      return this.course_data.name && this.course_data.professor && this.course_data.link
     },
-    linksEmptyOrValidURL() {
+    linksEmptyOrValidURL () {
       return this.isEmptyOrValidURL(this.course_data.link) &&
             this.isEmptyOrValidURL(this.course_data.discord) &&
             this.isEmptyOrValidURL(this.course_data.syllabus) &&
             this.isEmptyOrValidURL(this.course_data.custom_link) &&
-            this.isEmptyOrValidURL(this.course_data.banner);   
+            this.isEmptyOrValidURL(this.course_data.banner)
     },
-    addCard() {
+    addCard () {
       if (!this.requiredFieldsFilled()) {
-        this.warn.text = "You must fill out all fields marked with a (*)";
-        this.warn.visible = true;
+        this.warn.text = 'You must fill out all fields marked with a (*)'
+        this.warn.visible = true
       } else if (!this.linksEmptyOrValidURL()) {
-        this.warn.text = "Not a valid URL!";
-        this.warn.visible = true;
+        this.warn.text = 'Not a valid URL!'
+        this.warn.visible = true
       } else {
         this.courses.push({
           name: this.course_data.name,
-          section: this.course_data.section || "",
+          section: this.course_data.section || '',
           professor: this.course_data.professor,
 
           link: this.course_data.link,
 
-          banner: this.course_data.banner || "",
-          notes: this.course_data.notes || "",
+          banner: this.course_data.banner || '',
+          notes: this.course_data.notes || '',
 
-          discord: this.course_data.discord || "",
-          syllabus: this.course_data.syllabus || "",
-          custom_link: this.course_data.custom_link || "",
+          discord: this.course_data.discord || '',
+          syllabus: this.course_data.syllabus || '',
+          custom_link: this.course_data.custom_link || '',
 
           position: this.courses.length
-        });
-        this.closeModal();
+        })
+        this.closeModal()
       }
     },
-    saveCard() {
+    saveCard () {
       if (!this.requiredFieldsFilled()) {
-        this.warn.text = "You must fill out all fields marked with a (*)";
-        this.warn.visible = true;
+        this.warn.text = 'You must fill out all fields marked with a (*)'
+        this.warn.visible = true
       } else if (!this.linksEmptyOrValidURL()) {
-        this.warn.text = "Not a valid URL!";
-        this.warn.visible = true;
+        this.warn.text = 'Not a valid URL!'
+        this.warn.visible = true
       } else {
         this.courses[this.modal.item] = {
           name: this.course_data.name,
-          section: this.course_data.section || "",
+          section: this.course_data.section || '',
           professor: this.course_data.professor,
 
           link: this.course_data.link,
 
-          banner: this.course_data.banner || "",
-          notes: this.course_data.notes || "",
+          banner: this.course_data.banner || '',
+          notes: this.course_data.notes || '',
 
-          discord: this.course_data.discord || "",
-          syllabus: this.course_data.syllabus || "",
-          custom_link: this.course_data.custom_link || "",
+          discord: this.course_data.discord || '',
+          syllabus: this.course_data.syllabus || '',
+          custom_link: this.course_data.custom_link || '',
 
           position: this.course_data.position
-        };
-        this.closeModal();
+        }
+        this.closeModal()
       }
     },
-    fillInputs() {
+    fillInputs () {
       // clone card
-      this.course_data = {...this.courses[this.modal.item]};
+      this.course_data = { ...this.courses[this.modal.item] }
     },
-    onKeyDown(event) {
+    onKeyDown (event) {
       if (this.modal.visible) {
-        if (event.key == "Escape") {
-          this.closeModal();
+        if (event.key === 'Escape') {
+          this.closeModal()
         }
       }
     }
-  },
+  }
 }
 </script>
 

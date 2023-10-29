@@ -1,20 +1,20 @@
-import { createStore} from 'vuex'
+import { createStore } from 'vuex'
 
 export const store = createStore({
-  state() {
+  state () {
     return {
       // return empty array if courses is null
       // then order courses by position value
-      courses: JSON.parse(window.localStorage.getItem("courses") || "[]").sort((a, b) => a.position - b.position),
-      modal: { visible: false, editMode: false, item: -1 },
+      courses: JSON.parse(window.localStorage.getItem('courses') || '[]').sort((a, b) => a.position - b.position),
+      modal: { visible: false, editMode: false, item: -1 }
     }
   },
   getters: {
-      getCourses: state => state.courses,
-      getModal: state => state.modal,
+    getCourses: state => state.courses,
+    getModal: state => state.modal
   },
   mutations: {
-      setCourses(state, payload) { state.courses = payload; },
-      setModal(state, payload) { state.modal = payload; },
-  },
-});
+    setCourses (state, payload) { state.courses = payload },
+    setModal (state, payload) { state.modal = payload }
+  }
+})
