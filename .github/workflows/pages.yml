@@ -15,7 +15,7 @@ jobs:
         check-latest: true
     - run: npm install
     - run: npm run build
-    - name: deploy
+    - name: Deploy to Github Pages
       if: success()
       uses: crazy-max/ghaction-github-pages@v2
       with:
