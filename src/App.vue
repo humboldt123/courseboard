@@ -29,7 +29,7 @@
             :link="course.link"
             :banner="course.banner"
             :notes="course.notes"
-            :discord="course.discord"
+            :forums="course.forums"
             :syllabus="course.syllabus"
             :custom_link="course.custom_link"
             :position="course.position"

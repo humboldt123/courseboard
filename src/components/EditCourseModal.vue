@@ -29,7 +29,7 @@
                 <input v-model="course_data.notes" placeholder="One of the courses ever!!!" />
                 <span class="label">About</span>
 
-                <input v-model="course_data.discord" placeholder="https://courses.edu/course/12345678/forums" />
+                <input v-model="course_data.forums" placeholder="https://courses.edu/course/12345678/forums" />
                 <span class="label">Talk Page <span class="material-symbols-outlined inline-icon">link</span></span>
                 <input v-model="course_data.syllabus" placeholder="https://courses.edu/course/12345678/syllabus" />
                 <span class="label">Syllabus <span class="material-symbols-outlined inline-icon">link</span></span>
@@ -124,7 +124,7 @@ export default {
     },
     linksEmptyOrValidURL () {
       return this.isEmptyOrValidURL(this.course_data.link) &&
-            this.isEmptyOrValidURL(this.course_data.discord) &&
+            this.isEmptyOrValidURL(this.course_data.forums) &&
             this.isEmptyOrValidURL(this.course_data.syllabus) &&
             this.isEmptyOrValidURL(this.course_data.custom_link) &&
             this.isEmptyOrValidURL(this.course_data.banner)
@@ -147,7 +147,7 @@ export default {
           banner: this.course_data.banner || '',
           notes: this.course_data.notes || '',
 
-          discord: this.course_data.discord || '',
+          forums: this.course_data.forums || '',
           syllabus: this.course_data.syllabus || '',
           custom_link: this.course_data.custom_link || '',
 
@@ -174,7 +174,7 @@ export default {
           banner: this.course_data.banner || '',
           notes: this.course_data.notes || '',
 
-          discord: this.course_data.discord || '',
+          forums: this.course_data.forums || '',
           syllabus: this.course_data.syllabus || '',
           custom_link: this.course_data.custom_link || '',
 

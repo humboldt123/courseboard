@@ -2,7 +2,10 @@
   <div>
     <div class="course" @dblclick="edit();">
       <a :href="link">
-        <div class="banner" :style="{backgroundImage: 'url(' + banner + '), url(' + require('@/assets/images/default_banner.png') + ')'}"/>
+        <div class="banner" :style="{
+          backgroundImage: 'url(' + banner + '), url(' + require('@/assets/default_banner.png') + ')',
+          'background-color': 'var(--chalkboard-' + getFallbackColor(name) + ')'
+        }"/>
       </a>
       <div class="content">
        <h1 class="name cutoff" style="user-select: none;">{{ name }}<span v-if="section.length > 0"> [{{ section }}]</span></h1>
@@ -14,9 +17,9 @@
       <div class="links-container">
           <!-- invisible v-elses are a hack to maintain spacing -->
           <a :href="syllabus" target="_blank" v-if="propertyFilled('syllabus')"><span class="material-symbols-outlined">assignment</span></a>
-          <a :href="discord" target="_blank" v-if="propertyFilled('discord')"><span class="material-symbols-outlined">forum</span></a>
+          <a :href="forums" target="_blank" v-if="propertyFilled('forums')"><span class="material-symbols-outlined">forum</span></a>
           <a :href="custom_link" target="_blank" v-if="propertyFilled('custom_link')"><span class="material-symbols-outlined">captive_portal</span></a>
-          <span v-if="!propertyFilled('syllabus') && !propertyFilled('discord') && !propertyFilled('custom_link')" class="material-symbols-outlined invisible">category</span>
+          <span v-if="!propertyFilled('syllabus') && !propertyFilled('forums') && !propertyFilled('custom_link')" class="material-symbols-outlined invisible">category</span>
       </div>
       <div class="actions-container">
         <span class="material-symbols-outlined handle">drag_handle</span>
@@ -40,7 +43,7 @@ export default {
     banner: String,
     notes: String,
 
-    discord: String,
+    forums: String,
     syllabus: String,
     custom_link: String,
 
@@ -57,8 +60,18 @@ export default {
     }
   },
   methods: {
+    getFallbackColor(name) {
+      var colors = ["green", "purple", "red", "blue"];
+      var course = name.split(" ")[0];
+      var hash = 0;
+
+      for (var i = 0; i < course.length; i++) {
+        hash = ((hash << 5) - hash) + course.charCodeAt(i) | 0;
+      }
+      return colors[Math.abs(hash)%colors.length];
+    },
     propertyFilled (property) {
-      return this[property].length > 0
+      return this[property] && this[property].length > 0
     },
     edit () {
       const index = this.$.vnode.key
@@ -146,8 +159,6 @@ export default {
     background-size: cover;
     position: relative;
     overflow: hidden;
-
-    background-color: var(--chalkboard-green);
 
     border-radius: 5px 5px 0 0;
 
