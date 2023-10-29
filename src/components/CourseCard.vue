@@ -8,7 +8,7 @@
        <h1 class="name cutoff" style="user-select: none;">{{ name }}<span v-if="section.length > 0"> [{{ section }}]</span></h1>
         <p class="professor cutoff" style="user-select: none;">Professor: {{ professor }}</p>
         <p class="notes scroll">
-          {{ notes }} 
+          {{ notes }}
         </p>
       </div>
       <div class="links-container">
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { store } from "../store"
+import { store } from '../store'
 
 export default {
   name: 'CourseCard',
@@ -48,24 +48,24 @@ export default {
   },
   computed: {
     courses: {
-      get() { return store.state.courses; },
-      set(val) { store.commit("setCourses", val); }
+      get () { return store.state.courses },
+      set (val) { store.commit('setCourses', val) }
     },
     modal: {
-      get() { return store.state.modal; },
-      set(val) { store.commit("setModal", val); }
-    },
+      get () { return store.state.modal },
+      set (val) { store.commit('setModal', val) }
+    }
   },
   methods: {
-    propertyFilled(property) {
-      return this[property].length > 0;
+    propertyFilled (property) {
+      return this[property].length > 0
     },
-    edit() {
-      let index = this.$.vnode.key;
-      this.modal.item = index;
-      this.modal.editMode = true;
-      this.modal.visible = true;
-    },
+    edit () {
+      const index = this.$.vnode.key
+      this.modal.item = index
+      this.modal.editMode = true
+      this.modal.visible = true
+    }
   }
 }
 </script>
@@ -119,7 +119,7 @@ export default {
   .links-container > a {
     margin: 5px 10px 5px 10px;
   }
-  
+
   a > span {
     color: var(--dark);
   }

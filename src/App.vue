@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import { VueDraggableNext } from 'vue-draggable-next';
+import { VueDraggableNext } from 'vue-draggable-next'
 
-import CourseCard from './components/CourseCard.vue';
+import CourseCard from './components/CourseCard.vue'
 import EditCourseModal from './components/EditCourseModal.vue'
 
-import { store } from "./store"
+import { store } from './store'
 
 // Store logic, and export App
 export default {
@@ -56,54 +56,54 @@ export default {
     CourseCard,
     EditCourseModal
   },
-  data() {
+  data () {
     return {
-      drag: false,
+      drag: false
     }
   },
   computed: {
     modal: {
-      get() { return store.state.modal; },
-      set(val) { store.commit("setModal", val); }
+      get () { return store.state.modal },
+      set (val) { store.commit('setModal', val) }
     },
     courses: {
-      get() { return store.state.courses; },
-      set(val) { store.commit("setCourses", val); }
-    },
+      get () { return store.state.courses },
+      set (val) { store.commit('setCourses', val) }
+    }
   },
   methods: {
-    addCourse(event) {
+    addCourse (event) {
       // Make sure the user is clicking in the empty space
-      if (event.target.classList[0] == "card-holder" || event.target.classList[0] == "fullscreen") {
-        this.modal.editMode = false;
-        this.modal.item = -1;
-        this.modal.visible = true;
+      if (event.target.classList[0] === 'card-holder' || event.target.classList[0] === 'fullscreen') {
+        this.modal.editMode = false
+        this.modal.item = -1
+        this.modal.visible = true
       }
     },
-    updateCardPositions(event) {
+    updateCardPositions (event) {
       // vue-draggable doesn't like me updating the indices of the array
       // so we use this hack to keep track of the real "position"
-      // the array will sort itself according to position on page load 
+      // the array will sort itself according to position on page load
 
-      let origin = event.oldIndex;
-      let target = event.newIndex;
-      let index = this.courses.findIndex(card => card.position === origin);
+      const origin = event.oldIndex
+      const target = event.newIndex
+      const index = this.courses.findIndex(card => card.position === origin)
       this.courses.forEach(card => {
         if (target > origin) {
           if (card.position > origin && card.position <= target) {
-            card.position -= 1;
+            card.position -= 1
           }
         } else if (origin > target) {
           if (card.position >= target && card.position < origin) {
-            card.position += 1; 
+            card.position += 1
           }
         }
-      });
-      this.courses[index].position = target;
+      })
+      this.courses[index].position = target
 
       // update our courses in localStorage
-      window.localStorage.setItem("courses", JSON.stringify(this.courses));
-    },
+      window.localStorage.setItem('courses', JSON.stringify(this.courses))
+    }
   }
 }
 </script>
